@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Human Activity Recognition (HAR) Datasets</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      line-height: 1.6;
+      background: #fdfdfd;
+      color: #333;
+    }
+    header {
+      background: #24292e;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+    nav {
+      background: #0366d6;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    h2 {
+      color: #0366d6;
+      margin-top: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #f4f4f4;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+      background: #f4f4f4;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Human Activity Recognition (HAR) Datasets</h1>
+    <p>IMU-based Human Activity Data for Recognition Research</p>
+  </header>
+
+  <nav>
+    <a href="#datasets">Datasets</a>
+    <a href="#organization">Data Organization</a>
+    <a href="#preprocessing">Preprocessing</a>
+    <a href="#statistics">Statistics</a>
+    <a href="#citations">Citations</a>
+    <a href="#references">References</a>
+    <a href="https://github.com/jiehu01/Human-Action-Recognition-Sensor-Dataset" target="_blank">GitHub Repo</a>
+  </nav>
+
+  <main>
+    <section id="intro">
+      <p>
+        We compiled multiple human activity recognition (HAR) datasets, each collected using IMU sensors.
+        These datasets cover four activity states: walking, ascending stairs, descending stairs, and sitting.
+        Further details can be found in the paper 
+        <em>Time Series Adaptation Network for Sensor-based Human Activity Recognition</em>.
+      </p>
+      <p>
+        📂 Repository: 
+        <a href="https://github.com/jiehu01/Human-Action-Recognition-Sensor-Dataset" target="_blank">
+          https://github.com/jiehu01/Human-Action-Recognition-Sensor-Dataset
+        </a>
+      </p>
+    </section>
+
+    <section id="datasets">
+      <h2>1. PAMAP2 Dataset [1]</h2>
+      <p>
+        Contains 18 types of physical activities from 9 subjects. Includes accelerometers on arm, chest, and ankle,
+        plus heart rate monitor.  
+        <strong>Our usage:</strong> accelerometer data from the arm sensor.  
+        Sampling frequency: 100 Hz.
+      </p>
+
+      <h2>2. WISDM Dataset [2]</h2>
+      <p>
+        Collected from 51 users with a smartphone in the pants pocket. Activities: walking, jogging, stairs, standing, sitting.  
+        <strong>Our usage:</strong> accelerometer data only.  
+        Sampling frequency: 20 Hz.
+      </p>
+
+      <h2>3. UCI HAR Dataset [3]</h2>
+      <p>
+        Includes 30 subjects (ages 19–48) performing six activities. Data recorded at waist or free position.  
+        In addition to IMU, video recordings were collected for manual annotation.  
+        <strong>Our usage:</strong> accelerometer data only.  
+        Sampling frequency: 50 Hz.
+      </p>
+    </section>
+
+    <section id="organization">
+      <h2>Data Organization</h2>
+      <p>
+        Only accelerometer data are used. Data are organized as <code>&lt;X.npy, Y.npy&gt;</code> pairs:
+      </p>
+      <ul>
+        <li><code>X.npy</code>: shape <code>[num_samples, 128, 3]</code>, stores sensor data</li>
+        <li><code>Y.npy</code>: shape <code>[num_samples]</code>, stores labels</li>
+      </ul>
+      <p>Example: <code>X.npy</code> = [5,128,3], <code>Y.npy</code> = [5] → 5 samples per Raw Segment.</p>
+    </section>
+
+    <section id="preprocessing">
+      <h2>Data Preprocessing</h2>
+      <p>
+        - Selected activities: walking, upstairs, downstairs, sitting.<br>
+        - Unified sampling frequency to 50 Hz (linear interpolation).<br>
+        - Applied sliding window (length 128, 2.56s), non-overlapping.<br>
+        - Raw segments divided into fixed-size samples.
+      </p>
+    </section>
+
+    <section id="statistics">
+      <h2>Processed Data Statistics</h2>
+      <table>
+        <tr>
+          <th>Dataset</th>
+          <th>Users</th>
+          <th>Raw Segments</th>
+          <th>Samples</th>
+          <th>Samples per Activity (Walking, Upstairs, Downstairs, Sitting)</th>
+        </tr>
+        <tr>
+          <td>UCIHAR</td>
+          <td>30</td>
+          <td>616</td>
+          <td>3374</td>
+          <td>893, 809, 746, 926</td>
+        </tr>
+        <tr>
+          <td>WISDM</td>
+          <td>51</td>
+          <td>323</td>
+          <td>13658</td>
+          <td>8258, 2341, 1901, 1158</td>
+        </tr>
+        <tr>
+          <td>PAMAP2</td>
+          <td>9</td>
+          <td>361</td>
+          <td>4727</td>
+          <td>1584, 905, 808, 1430</td>
+        </tr>
+      </table>
+      <p><em>Labels are represented by numbers in the same order as the table above.</em></p>
+    </section>
+
+    <section id="citations">
+      <h2>Recommended Citation</h2>
+      <ul>
+        <li>Wen S, Chen Y, Ma Y, et al. <em>Time series adaptation network for sensor-based cross domain human activity recognition</em>. IJCNN 2023.</li>
+      </ul>
+    </section>
+
+    <section id="references">
+      <h2>References</h2>
+      <ol>
+        <li>Reiss A, Stricker D. <em>Introducing a new benchmarked dataset for activity monitoring</em>. ISWC 2012.</li>
+        <li>Kwapisz J R, Weiss G M, Moore S A. <em>Activity recognition using cell phone accelerometers</em>. ACM SigKDD Explorations 2011.</li>
+        <li>Anguita D, Ghio A, Oneto L, et al. <em>A public domain dataset for human activity recognition using smartphones</em>. ESANN 2013.</li>
+        <li>Wen S, Chen Y, Ma Y, et al. <em>Time series adaptation network for sensor-based cross domain human activity recognition</em>. IJCNN 2023.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      &copy; 2025 Human Activity Recognition (HAR) Datasets Project.  
+      View on <a href="https://github.com/jiehu01/Human-Action-Recognition-Sensor-Dataset" target="_blank">GitHub</a>.
+    </p>
+  </footer>
+</body>
+</html>
